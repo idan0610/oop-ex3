@@ -1,0 +1,203 @@
+idan0610
+
+
+
+
+=============================
+=      File description     =
+=============================
+SimpleHashSet.java - implements the abstract SimpleHashSet class.
+ChainedHashSet.java - implements the ChainedHashSet class.
+OpenHashSet.java - implements the OpenHashSet class.
+CollectionFacadeSet.java - implements the CollectionFacadeSet class.
+SimpleSetPerformanceAnalyzer.java - implements the SimpleSetPerformanceAnalyzer class.
+QUESTIONS - answers to the questions.
+RESULTS - results of SimpleSetPerformanceAnalyzer
+
+
+=============================
+=          Design           =
+=============================
+The ChainedHashSet and OpenHashSet classes extend abstract SimpleHashSet class implementing SimpleSet.
+The CollectionFacadeSet also implementing SimpleSet and is used to use LinkedList, TreeSet and HashSet of
+java more easily with simpler API. The SimpleSetPerformanceAnalyzer has an SimpleSet array of the five
+data structures tested (The TreeSet, LinkedList and HashSet using CollectionFacadeSet) and 2 methods, one to
+add strings to the data structure from an string array, and two for searching a word on the data structure.
+
+
+=============================
+=  Implementation details   =
+=============================
+1. The ChainedHashSet's table is an array of CollectionFacadeSet objects. At first, their values are all null,
+and a CollectionFacadeSet on index i will be initialized with LinkedList only when a string will be added
+to the table whose hash code is i. The ChainedHashSet use the CollectionFacadeSet methods for its needs.
+
+2. The deletion mechanism in OpenHashSet is setting the cell contains the deleted string with a constant
+string used as a flag to mark a cell that had a deleted string. When adding, searching or deleting a string
+from the table, a deleted cell will be compared by reference to the constant flag string, so even if someone
+will try to add, search or delete a string equal in its value to the constant, it wont work because their
+references are different.
+
+3. Analysis of the Performance results:
+	a. The bad results of the ChainedHashSet for data1 was because all the words in data1 has the same hash
+	code and so all the words are actually located on the same LinkedList (via the CollectionFacadeSet).
+	So searching and deleting takes a long time, especially when the word is not on the list, because the
+	search will move on all the words on the table.
+	The bad results of the OpenHashSet for data1 is also because all the words has the same hash code, and
+	so every word takes longer then previous word to find the requested cell for add/search/delete,
+	especially when a rehashing is required after adding/deleting words.
+	
+	b. The ChainedHashSet seems to be more efficient then the OpenHashSet is preferable, but in comparison to
+	the java data structures, they are much more efficient then my Chained and Open Hash Sets.
+	The Linked List takes longer time for delete and search, but keep an order of the items, and is used when
+	the order of items is important. Also, adding to the Linked List is very fast (assuming double items is
+	allowed), and is preferable when I want to make an ordered list of many items.
+	The TreeSet seems to be faster in terms of search and delete, but do not keeps an order of the items. It
+	is preferable when the order is not important, but operations like search and delete are required
+	multiple times.
+	The HashSet is even faster then the TreeSet, and finds the requested items very quick. It's good for
+	maintaining a large number of items when operations like search and delete are frequent. Its weakness is
+	that the items are not ordered.
+	
+	c. As I mentioned, my ChainedHashSet works faster then the OpenHashSet because the ChainedHashSet does not
+	need to try multiple times and find the right cell, and finds the correct one on the first try.
+	
+	d. The java's HashSet works a lot more efficient then my implementations, and is surly preferable.
+	
+	e. At first i thought the OpenHashSet will work faster then the ChainedHashSet, but the results proved
+	otherwise. Especially I was surprised by the relative quick times of the ChainedHashSet in the contains
+	methods. I was not surprised that java's data structures worked faster then mine.
+	
+	f. I was not surprised by java's HashSet performance because as I learned about HashSets, they supposed
+	to be very efficient data structures in comparison to other data structures.
+	
+	g. I implemented the modulo efficiently, and it is significantly quicker then the standard modulo
+	comparison.
+
+
+=============================
+=    Answers to questions   =
+=============================
+Results of Performance Analysis:
+1. The time it took in milliseconds to initialize data1 on each data structure:
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		93621
+		OpenHashSet			125227
+		TreeSet				57
+		LinkedList			53853
+		HashSet				49		- The fastest
+
+ 2. The time in milliseconds it took to initialize data2 on each data structure:
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		54
+		OpenHashSet			150
+		TreeSet				46
+		LinkedList			28520
+		HashSet				11		- The fastest
+
+3. The time it took in milliseconds to initialize each data structure with the contents of data1 compared
+   to data2:
+	A) ChainedHashSet:
+		data1				data2
+		=====				=====
+		93621				54
+	B) OpenHashSet:
+		data1				data2
+		=====				=====
+		125227				150
+	A) TreeSet:
+		data1				data2
+		=====				=====
+		57					46
+	A) LinkedList:
+		data1				data2
+		=====				=====
+		53853				28520
+	A) HashSet:
+		data1				data2
+		=====				=====
+		49					11
+
+4. The time it took in nanoseconds for contains("hi") after data1 initialization.
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		33395
+		OpenHashSet			8942743
+		TreeSet				16720
+		LinkedList			1346502
+		HashSet				12494		- The fastest
+		
+5. The time it took in nanoseconds for contains("-13170890158") after data1 initialization.
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		2004192
+		OpenHashSet			4862029
+		TreeSet				15062
+		LinkedList			1585849
+		HashSet				14301		- The fastest
+
+6. The time it took in nanoseconds for contains("hi") compared to contains("-13170890158")
+   after data1 initialization.
+	A) ChainedHashSet:
+		contains("hi")		contains("-13170890158")
+		=============		========================
+		33395				2004192
+	B) OpenHashSet:
+		contains("hi")		contains("-13170890158")
+		=============		========================
+		8942743				4862029
+	A) TreeSet:
+		contains("hi")		contains("-13170890158")
+		=============		========================
+		16720				15062
+	A) LinkedList:
+		contains("hi")		contains("-13170890158")
+		=============		========================
+		1346502				1585849
+	A) HashSet:
+		contains("hi")		contains("-13170890158")
+		=============		========================
+		12494				12853
+
+7. The time it took in nanoseconds for contains("23") after data2 initialization.
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		33930
+		OpenHashSet			12853		- The fastest
+		TreeSet				36808
+		LinkedList			27350
+		HashSet				32323
+		
+8. The time it took in nanoseconds for contains("hi") after data2 initialization.
+		Data Structure		Time
+		==============		====
+		ChainedHashSet		13123
+		OpenHashSet			16308
+		TreeSet				14623
+		LinkedList			1178588
+		HashSet				12870		- The fastest
+
+9. The time it took in nanoseconds for contains("23") compared to contains("hi")
+   after data2 initialization.
+	A) ChainedHashSet:
+		contains("23")		contains("hi")
+		=============		==============
+		33930				13123
+	B) OpenHashSet:
+		contains("23")		contains("hi")
+		=============		==============
+		12853				16308
+	A) TreeSet:
+		contains("23")		contains("hi")
+		=============		==============
+		36808				14623
+	A) LinkedList:
+		contains("23")		contains("hi")
+		=============		==============
+		27350				1178588
+	A) HashSet:
+		contains("23")		contains("hi")
+		=============		==============
+		32323				12870
